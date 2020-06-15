@@ -1,0 +1,29 @@
+h1,
+h3 {
+  text-align: center;
+}
+h3 {
+  background-color: black;
+  color: white;
+  font-size: 0.9em;
+  margin-bottom: 0px;
+}
+.news p {
+  background-color: #cccccc;
+  margin-top: 0px;
+}
+.news {
+  /*background-color: #cccccc;*/
+  width: 70%;
+  margin: auto;
+}
+
+.form {
+  margin: 100px 612px 20px;
+  -webkit-text-stroke-width: medium;
+}
+
+a {
+  text-decoration: none;
+  color: blue;
+}

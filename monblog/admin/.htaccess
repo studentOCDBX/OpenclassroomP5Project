@@ -1,0 +1,4 @@
+AuthName "Page d'administration protégée"
+AuthType Basic
+AuthUserFile " http://p5/ConcevezavecPHPMySQL/blog/admin/.htpasswd "
+Require valid-user
