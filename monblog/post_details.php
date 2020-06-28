@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html>	
 <html lang="fr">
     <head>
     <!-- Required meta tags -->
@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
 
-    <title>Mon Blog</title>
+    <title>commentaires.php</title>
     </head>
     <body>
         <div class="container">
@@ -17,13 +17,13 @@
                     <h1>Mon super blog!</h1>
                     <p>
                         <a href="index.php">Retour à la liste des billets :</a> 
-                    </p>
+                    </p><hr>
                     <?php
                     //connexion à la bdd 
                     include('db_connect.php');
 
                     //recupération du billet sélectionné.
-                    $req = $db->prepare('SELECT id, title, content, DATE_FORMAT(creation_date, \'%e/%c/%Y à %Hh%imin%Ss\') AS creation_date FROM posts WHERE id = ? ');
+                    $req = $db->prepare('SELECT id, author, title, introduction, content, DATE_FORMAT(creation_date, \'%e/%c/%Y à %Hh%imin%Ss\') AS creation_date FROM posts WHERE id = ? ');
                     
                     $req->execute(array($_GET['post']));
                     $data = $req->fetch(); 
@@ -32,14 +32,11 @@
                     {
                     ?>
                         <div class="news">
-                            <h3> 
-	                            <?= strip_tags($data['title']); ?> 
-	                            <em>le <?= $data['creation_date']; ?></em>
-                            </h3>
-                            <p>
-	                        <?= nl2br(strip_tags($data['content'])); ?>
+                        <?php include('post_view.php');?><br>
+                         <strong>Par: <?= $data['author']; ?></strong><hr>
+                        <?= $data['content']; ?>
                         </p> 
-                        </div>
+                        </div><br><hr>
                         
                         <h2>Commentaires :</h2>
                     <?php
@@ -64,8 +61,8 @@
                             <strong> <?= strip_tags($data['author']). ':' ;?></strong> le <?= $data['comment_date']; ?>
                         </p>
                         <p>
-                            <?= nl2br(strip_tags( $data['comment'])); ?>   
-                        </p> 
+                            <?= nl2br(strip_tags( $data['comment'])); ?><br>   
+                        </p> <hr>
                     <?php
                     } // Fin de la boucle des commentaires. 
                     $req->closeCursor();
@@ -73,11 +70,11 @@
                      
                     <form action="comments_post.php?post=<?= $_GET['post'] ;?>" method="POST"> <!--formulaire pour ajout d'un commentaire -->
                         <div class= "form-group col-md-3"> 
-                             <label for= "author" >Pseudo : </label> 
-                             <input type= "text" class= "form-control" name="author" id= "author" placeholder= "Votre Pseudo :" > 
+							<!-- <label for= "author" >Pseudo : </label>  -->
+							<input type= "text" class= "form-control" name="author" id= "author" placeholder= "Votre Pseudo :" > 
                         </div>
                         <div class= "form-group col-md-6" >
-                            <label for= "comment" >Commentaire : </label>
+                            <!-- <label for= "comment" >Commentaire : </label> -->
                             <textarea  class= "form-control" name="comment" id="comment" placeholder= "Votre commentaire:"  cols="30" rows="10"></textarea>
                         </div> 
                         <button type="submit" class="btn btn-success" >Envoyer</button>

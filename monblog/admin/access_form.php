@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 	<head>
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
@@ -12,7 +12,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<h1>Formulaire d'accès à la page d'Administration !</h1>
+			<h1>Formulaire d'accès à la page d'Administration !</h1><br>
 			<div class="row">
 			<?php
 			if(!empty($_POST['login']) && !empty($_POST['pass']))
@@ -26,10 +26,12 @@
 			?>
 			<form action="" method="POST">
 				<div class="form-group">
-					<label for="login">Login : <input type="text" name="login" id="login"></label>
+					<!-- <label for="login">Login :</label> -->
+					<input type="text" class="form-control" name="login" placeholder="Login: " id="login">
 				</div>
 				<div class="form-group">
-					<label for="password">Mot de passe : <input type="password" name="pass" id="password"></label>
+					<!-- <label for="password">Mot de passe : </label> -->
+					<input type="password" class="form-control" placeholder="Mot de passe:" name="pass" id="password">
 				</div>
 				<button class="btn btn-success" type="submit" >Crypter</button>
 			</form>

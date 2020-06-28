@@ -1,53 +1,57 @@
-<!doctype html>
-<html lang="fr">
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <h1>Bienvenue sur mon Super Blog !</h1>  <br> 
+    <p>Derniers billets du blog :</p>
+    
+    <?php
+    include('db_connect.php');
+    $post_perPage = 4;
+    $current_page = 1;
+    $post_numberReq = $db->query('SELECT id FROM posts');
+    $post_number = $post_numberReq->rowCount();
+    $page_number = ceil($post_number/$post_perPage);
 
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link rel="stylesheet" href="style.css">
+    if (isset($_GET['page']) && !empty($_GET['page']) && $_GET['page'] >0 && $_GET['page'] <= $page_number)
+    {
+        $current_page = $_GET['page'];
+        $_GET['page'] = intval($_GET['page']);
+    }
+    else
+    { 
+        $current_page = 1;
+    }
+    $start_entry = ($current_page-1)*$post_perPage;
+        //On récupère les cinqs derniers billets
+    $req = $db->query('SELECT id, title, introduction, content, DATE_FORMAT(creation_date, \'%e/%m/%Y à %Hh%imin%ss\') AS creation_date FROM posts ORDER BY id DESC LIMIT '.$start_entry.','.$post_perPage);
 
-        <title>Mon blog</title>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Bienvenue sur mon Super Blog !</h1>  <br> 
-            <p>Derniers billets du blog :</p>
-            <div class="row">
-                <?php
-                    include('db_connect.php');
-                    //On récupère les cinqs derniers billets
-                    $req = $db->query('SELECT id, title, content, DATE_FORMAT(creation_date, \'%e/%m/%Y à %Hh%imin%ss\') AS creation_date FROM posts ORDER BY creation_date LIMIT 0,5');
-                
-                while ($data = $req->fetch())
-                {
-                ?>
-                    <div class="news"> <!--- On affiche les cinq derniers billets. -->
-                        <h3> 
-	                        <?= strip_tags($data['title']); ?> 
-	                        <em>le <?= $data['creation_date']; ?></em>
-                        </h3>
-                        <p>
-	                        <?= nl2br(strip_tags($data['content'])); ?>
-                            <br>
-                            <em>
-                                <a href="comments.php?post=<?= $data['id'] ;?> ">Commentaires</a>
-                            </em>
-                        </p>  
-                    </div>
-                <?php
-                } // Fin de la boucle des billets.
-                $req->closeCursor(); //On libère le curseur pour la prochaine requête
-                ?>
-            </div>
-        </div>
+    while ($data = $req->fetch())
+    {
+    ?>
+        <div class="news"> <!--- On affiche les cinq derniers billets. -->
+            <?php include('post_view.php');?>
+            <br>
+                <em>
+                    <a href="post_details.php?post=<?= $data['id'] ;?> ">Lire la suite</a> | <a href="delete_post.php?post=<?= $data['id'] ;?> ">Supprimer</a>
+                </em>
+            </p>  
+        </div>          
+    <?php
+    } // Fin de la boucle des billets.
+    $req->closeCursor(); //On libère le curseur pour la prochaine requête.
+    //On fait une boucle pour écrire les liens vers chacune des pages.
+    echo 'Page :';
+    for ($i=1; $i <= $page_number; $i++)
+    { 
+        if ($i == $current_page)
+        {
+            echo $i. ' '. '/';
+        }
+        else
+        {
+            echo ' <a href="index.php?page='.$i.'">'.$i.'</a> /';
+        }
+    }
+?>
 
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    </body>
-</html>
+
+
+
+

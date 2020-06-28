@@ -45,14 +45,14 @@
                     
                     echo 'Votre commentaire a bien été ajouté.';
                     
-                    header('Location:comments.php?post='.$_GET['post']); //Redirection du visiteur vers commentaires.php
+                    header('Location:post_details.php?post='.$_GET['post']); //Redirection du visiteur vers commentaires.php
                 }
                 else
                 {
                 ?>
                     <p>
                         Veuillez entrer votre pseudo, suivi de votre message. <br>
-                        Cliquez <a href="comments.php?post=<?= $_GET['post'] ;?> "> ici </a> pour un retour sur la page des commentaires.
+                        Cliquez <a href="post_details.php?post=<?= $_GET['post'] ;?> "> ici </a> pour un retour à la page du commentaire.
                     </p>
                 <?php
                 }  
